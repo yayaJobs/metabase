@@ -96,3 +96,7 @@ To make sure you are using the correct connection configuration:
 
 - **Connect using `DNS SRV`**, which is the recommended method for newer Atlas clusters.
 - **Have you checked your cluster host whitelist?** When testing a connection but seeing failure, have you tried setting the IP whitelist to `0.0.0.0/0`? Whitelisting this address allows connections from any IP addresses. If you know the IP address(es) or CIDR block of clients, use that instead.
+- **Connect to the secondary server** When connecting to a cluster, always use the "?readPreference=secondary" argument in the connection string, this will allow Metabase to read from a secondary server instead of the primary, so all read operations don't consume resources from the primary server
+
+## Fingerprinting
+- If you just added new keys in a MongoDB document but Metabase does not reflect this change, it might be because Metabase hasn't seen this document for building its metadata. As MongoDB is a NoSQL database, documents in a single collection can vary enough so Metabase will not see all the variations of these to build the correct visualization of the tables. The solution for this issue is to include in the first document of the collection a sample document with all possible collection keys with null values to make Metabase recognize the correct schema of the entire collection.
