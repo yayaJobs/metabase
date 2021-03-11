@@ -7,6 +7,13 @@ This article covers:
 - [Connecting to a MongoDB Atlas cluster](#connecting-to-a-mongodb-atlas-cluster).
 - [General connectivity concerns](#general-connectivity-concerns).
 
+## How does MongoDB work in Metabase
+Metabase automagically converts the selection you make in the UI into MongoDB syntax to see the data in a visual representation. However, structured data is easier to query than non-structure data due to its nature: with structured data you know the fields and types that a query will return while you can't be sure in the non-structured data unless you force schemas or types at the code or database level.
+
+As Metabase needs to know a few things before it can provide users with pre-populated filters or even the difference between a `datetime` or a `string` field, it will scan the first 200 documents in your collections to populate its metadata tables so it can give you the full power of the interface without overloading your MongoDB engine with a full collection scan.
+
+This technical decision is very important to understand in the case of any No-SQL database as it can have impact in the visualization of your questions and even problems with documents or fields not appearing in your results. For more information, check out our [troubleshooting guide](../../troubleshooting-guide/datawarehouse.html)
+
 ## Connecting to MongoDB
 
 Go to Admin -> Databases, and click the **Add database** button. Select MongoDB from the dropdown.
@@ -97,6 +104,3 @@ To make sure you are using the correct connection configuration:
 - **Connect using `DNS SRV`**, which is the recommended method for newer Atlas clusters.
 - **Have you checked your cluster host whitelist?** When testing a connection but seeing failure, have you tried setting the IP whitelist to `0.0.0.0/0`? Whitelisting this address allows connections from any IP addresses. If you know the IP address(es) or CIDR block of clients, use that instead.
 - **Connect to the secondary server** When connecting to a cluster, always use the "?readPreference=secondary" argument in the connection string, this will allow Metabase to read from a secondary server instead of the primary, so all read operations don't consume resources from the primary server
-
-## Some document keys do not appear in Metabase
-- If you have added new keys in a MongoDB document but Metabase does not reflect this change after sync, then it might be because Metabase hasn't seen that document for building its metadata. As MongoDB is a NoSQL database, documents in a single collection can vary enough so Metabase will not see all the variations of these to build the correct visualization of the fields. The solution for this issue is to include in the first document of the collection a sample with all possible document keys with null values to make Metabase recognize the correct schema of the entire collection.
