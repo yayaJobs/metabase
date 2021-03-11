@@ -44,14 +44,14 @@
                             {(s/required-key :column_settings) ColSettings})))
 
 (defn- field-id-key [col]
-  (keyword (format "[\"ref\",[\"field\",%d,null]]" (:id col))))
+  (format "[\"ref\",[\"field\",%d,null]]" (:id col)))
 
 (defn- expression-key [col]
-  (keyword (format "[\"ref\",[\"expression\",\"%s\"]]" (:expression_name col))))
+  (format "[\"ref\",[\"expression\",\"%s\"]]" (:expression_name col)))
 
 (defn- find-col-setting [{:keys [column_settings]} col]
-  (or ((field-id-key col) column_settings)
-      ((expression-key col) column_settings)))
+  (or (get column_settings (field-id-key col))
+      (get column_settings (expression-key col))))
 
 ;;export type DateStyle =
 ;  | "M/D/YYYY"
