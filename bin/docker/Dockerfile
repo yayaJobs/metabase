@@ -3,13 +3,11 @@ FROM adoptopenjdk/openjdk11:alpine-jre
 ENV FC_LANG en-US LC_CTYPE en_US.UTF-8
 
 # dependencies
-RUN apk -U upgrade && apk add --update --no-cache bash ttf-dejavu fontconfig
+RUN apk -U upgrade && apk add --update --no-cache bash ttf-dejavu fontconfig && \
+    mkdir -p /plugins && chmod a+rwx /plugins
 
 # add Metabase jar & add our run script to the image
 COPY ./metabase.jar ./run_metabase.sh /app/
-
-# create the plugins directory, with writable permissions
-RUN mkdir -p /plugins && chmod a+rwx /plugins
 
 # expose our default runtime port
 EXPOSE 3000
