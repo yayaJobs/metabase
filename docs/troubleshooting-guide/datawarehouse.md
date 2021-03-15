@@ -112,5 +112,10 @@ Metabase fails to connect to your data warehouse and the Metabase server logs in
 
 Navigate to the options for your data warehouse and locate the Additional JDBC Connection Strings option, then add `trustServerCertificate=true` as an additional string.
 
-## I added tables or fields to my database but don't see them in Metabase
-If you have added new keys in a MongoDB document but Metabase does not reflect this change after sync, then it might be because Metabase hasn't seen that document for building its metadata. As MongoDB is a NoSQL database, documents in a single collection can vary enough so Metabase will not see all the variations of these to build the correct visualization of the fields. The solution for this issue is to include in the first document of the collection a sample document with all possible keys with null values to make Metabase recognize the correct schema of the entire collection, or modify any of the first documents of the collection to include all the possible keys that are included in the rest of the documents so Metabase can build the metadata correctly.
+## I added fields to my database but don't see them in Metabase
+
+Metabase may not sync all of your fields, as it only scans the first 200 documents in a collection to get a sample of the fields the collection contains. Since any document in a MongoDB collection can contain any number of fields, the only way to get 100% coverage of all fields would be to scan every single document in every single collection, which would put too much strain on your database (so we don't do that).
+
+One workaround is to include all possible keys in the first document of the collection, and give those keys null values. That way, Metabase will be able to recognize the correct schema for the entire collection. 
+
+An alternative approach (assuming you have a fairly well-developed data infrastructure), is to turn off Metabase's automated sync process, and use the [Metabase API](https://www.metabase.com/docs/latest/api-documentation.html) to update the metadata model with the new fields.
