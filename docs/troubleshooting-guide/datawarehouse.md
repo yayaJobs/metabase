@@ -113,6 +113,7 @@ Metabase fails to connect to your data warehouse and the Metabase server logs in
 Navigate to the options for your data warehouse and locate the Additional JDBC Connection Strings option, then add `trustServerCertificate=true` as an additional string.
 
 ## MongoDB
+
 ### I added fields to my database but don't see them in Metabase
 
 Metabase may not sync all of your fields, as it only scans the first 200 documents in a collection to get a sample of the fields the collection contains. Since any document in a MongoDB collection can contain any number of fields, the only way to get 100% coverage of all fields would be to scan every single document in every single collection, which would put too much strain on your database (so we don't do that).
