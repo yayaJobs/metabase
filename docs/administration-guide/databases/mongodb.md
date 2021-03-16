@@ -99,4 +99,4 @@ To make sure you are using the correct connection configuration:
 
 - **Connect using `DNS SRV`**, which is the recommended method for newer Atlas clusters.
 - **Have you checked your cluster host whitelist?** When testing a connection but seeing failure, have you tried setting the IP whitelist to `0.0.0.0/0`? Whitelisting this address allows connections from any IP addresses. If you know the IP address(es) or CIDR block of clients, use that instead.
-- **Connect to the secondary server**. When connecting to a cluster, always use the "?readPreference=secondary" argument in the connection string, which allows Metabase to read from a secondary server instead of consuming resources from the primary server.
+- **Connect to the secondary server**. When connecting to a cluster, always use the `?readPreference=secondary` argument in the connection string, which allows Metabase to read from a secondary server instead of consuming resources from the primary server.
